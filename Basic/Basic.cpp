@@ -154,7 +154,7 @@ void processLine(std::string line, Program &program, EvalState &state) {
             leftScanner.ignoreWhitespace();
             leftScanner.scanNumbers();
             leftScanner.setInput(leftExprStr);
-            Expression* exp1 = parseExp(leftScanner);
+            Expression* exp1 = readE(leftScanner);
 
             // Parse right expression
             std::string rightExprStr;
@@ -166,7 +166,7 @@ void processLine(std::string line, Program &program, EvalState &state) {
             rightScanner.ignoreWhitespace();
             rightScanner.scanNumbers();
             rightScanner.setInput(rightExprStr);
-            Expression* exp2 = parseExp(rightScanner);
+            Expression* exp2 = readE(rightScanner);
 
             stmt = new IfStatement(exp1, exp2, op, targetLine);
         } else {
