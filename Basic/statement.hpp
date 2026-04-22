@@ -85,4 +85,80 @@ public:
  * specify its own destructor method to free that memory.
  */
 
+// REM statement
+class RemStatement : public Statement {
+public:
+    RemStatement() {}
+    void execute(EvalState &state, Program &program) override {
+        // REM statements do nothing
+    }
+};
+
+// LET statement
+class LetStatement : public Statement {
+private:
+    std::string var;
+    Expression* exp;
+public:
+    LetStatement(const std::string& varName, Expression* expr) : var(varName), exp(expr) {}
+    ~LetStatement() override {
+        delete exp;
+    }
+    void execute(EvalState &state, Program &program) override;
+};
+
+// PRINT statement
+class PrintStatement : public Statement {
+private:
+    Expression* exp;
+public:
+    PrintStatement(Expression* expr) : exp(expr) {}
+    ~PrintStatement() override {
+        delete exp;
+    }
+    void execute(EvalState &state, Program &program) override;
+};
+
+// INPUT statement
+class InputStatement : public Statement {
+private:
+    std::string var;
+public:
+    InputStatement(const std::string& varName) : var(varName) {}
+    void execute(EvalState &state, Program &program) override;
+};
+
+// END statement
+class EndStatement : public Statement {
+public:
+    EndStatement() {}
+    void execute(EvalState &state, Program &program) override;
+};
+
+// GOTO statement
+class GotoStatement : public Statement {
+private:
+    int lineNumber;
+public:
+    GotoStatement(int line) : lineNumber(line) {}
+    void execute(EvalState &state, Program &program) override;
+};
+
+// IF statement
+class IfStatement : public Statement {
+private:
+    Expression* exp1;
+    Expression* exp2;
+    std::string op;
+    int lineNumber;
+public:
+    IfStatement(Expression* e1, Expression* e2, const std::string& operation, int line)
+        : exp1(e1), exp2(e2), op(operation), lineNumber(line) {}
+    ~IfStatement() override {
+        delete exp1;
+        delete exp2;
+    }
+    void execute(EvalState &state, Program &program) override;
+};
+
 #endif

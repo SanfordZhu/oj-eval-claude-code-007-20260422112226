@@ -140,13 +140,17 @@ public:
 
     int getNextLineNumber(int lineNumber);
 
-    //more func to add
-    //todo
+    // Additional methods for BASIC interpreter
+    void listProgram(std::ostream& os) const;
+    void runProgram(EvalState& state);
+    bool hasLine(int lineNumber) const;
+    void setCurrentLine(int lineNumber);
+    int getCurrentLine() const;
 
 private:
-
-    // Fill this in with whatever types and instance variables you need
-    //todo
+    std::map<int, std::string> sourceLines;
+    std::map<int, Statement*> parsedStatements;
+    int currentLine; // For tracking execution flow
 };
 
 #endif
