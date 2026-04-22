@@ -92,10 +92,18 @@ void processLine(std::string line, Program &program, EvalState &state) {
             if (scanner.nextToken() != "=") {
                 error("SYNTAX ERROR");
             }
-            Expression* exp = parseExp(scanner);
+            Expression* exp = readE(scanner);
+            if (scanner.hasMoreTokens()) {
+                delete exp;
+                error("SYNTAX ERROR");
+            }
             stmt = new LetStatement(var, exp);
         } else if (command == "PRINT") {
-            Expression* exp = parseExp(scanner);
+            Expression* exp = readE(scanner);
+            if (scanner.hasMoreTokens()) {
+                delete exp;
+                error("SYNTAX ERROR");
+            }
             stmt = new PrintStatement(exp);
         } else if (command == "INPUT") {
             std::string var = scanner.nextToken();
@@ -204,13 +212,21 @@ void processLine(std::string line, Program &program, EvalState &state) {
             if (scanner.nextToken() != "=") {
                 error("SYNTAX ERROR");
             }
-            Expression* exp = parseExp(scanner);
+            Expression* exp = readE(scanner);
+            if (scanner.hasMoreTokens()) {
+                delete exp;
+                error("SYNTAX ERROR");
+            }
             int value = exp->eval(state);
             state.setValue(var, value);
             delete exp;
         } else if (command == "PRINT") {
             // Immediate PRINT
-            Expression* exp = parseExp(scanner);
+            Expression* exp = readE(scanner);
+            if (scanner.hasMoreTokens()) {
+                delete exp;
+                error("SYNTAX ERROR");
+            }
             int value = exp->eval(state);
             std::cout << value << std::endl;
             delete exp;
